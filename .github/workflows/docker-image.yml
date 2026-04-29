@@ -1,0 +1,13 @@
+name: Docker Image
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  docker-image:
+    uses: zakodium/workflows/.github/workflows/docker-image.yml@docker-image-v1
+    secrets:
+      github-token: ${{ secrets.BOT_TOKEN }}

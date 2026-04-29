@@ -1,0 +1,9 @@
+# Downloaded by update_visualizer.sh — not committed
+html/visualizer/src/
+html/github/
+
+# Local environment
+.env
+
+# Claude Code
+.claude/
