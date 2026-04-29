@@ -7,11 +7,6 @@
       name="description"
       content="Interactive tool for predicting copolymer reactivity ratios."
     />
-    <meta name="keywords" content="copolymer, reactivity, polymer, prediction" />
-    <script
-      data-main="visualizer/src/init"
-      src="visualizer/src/components/requirejs/require.js"
-    ></script>
     <style>
       #ci-visualizer {
         min-height: 100vh;
@@ -21,13 +16,6 @@
         margin: 0;
       }
     </style>
-    <script>
-      /*
-       * Do not remove. This is to make sure bluebird is correctly loaded
-       * for browsers that don't have the Promise global.
-       */
-      window.Promise = undefined;
-    </script>
   </head>
   <body>
     <div
@@ -35,5 +23,13 @@
       data-ci-view="https://couch.cheminfo.org/cheminfo-public/7fe222bb1ecb56c6c941ac6fcab63053/view.json"
       data-ci-config="./visualizer/config.json"
     ></div>
+    <script>
+      var version = new URLSearchParams(window.location.search).get('v') || 'latest';
+      var prefix = 'https://www.lactame.com/visualizer/' + version;
+      var script = document.createElement('script');
+      script.setAttribute('data-main', prefix + '/init');
+      script.setAttribute('src', prefix + '/components/requirejs/require.js');
+      document.head.appendChild(script);
+    </script>
   </body>
 </html>
