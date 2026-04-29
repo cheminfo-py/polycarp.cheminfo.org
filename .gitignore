@@ -2,6 +2,9 @@
 html/visualizer/src/
 html/github/
 
+# Local compose (copy from compose.example.yaml and customize)
+compose.yaml
+
 # Local environment
 .env
 
