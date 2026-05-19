@@ -1,0 +1,67 @@
+services:
+  cloudflared:
+    image: ${CLOUDFLARED_IMAGE}
+    restart: unless-stopped
+    stop_grace_period: 30s
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - internal
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: '3'
+
+  frontend:
+    build: .
+    restart: unless-stopped
+    stop_grace_period: 3s
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+          pids: 64
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: '3'
+    tmpfs:
+      - /var/cache/nginx:size=50m
+      - /var/run:size=10m
+      - /tmp:size=10m
+    networks:
+      - internal
+    depends_on:
+      - backend
+
+  backend:
+    image: ghcr.io/lamalab-org/copolymer-reactivity:latest
+    restart: unless-stopped
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: '2'
+          pids: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: 200m
+        max-file: '3'
+    networks:
+      - internal
+
+networks:
+  internal:

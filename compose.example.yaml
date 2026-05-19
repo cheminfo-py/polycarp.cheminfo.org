@@ -7,6 +7,6 @@ services:
       - backend
 
   backend:
-    image: ghcr.io/lamalab-org/copolymer-reactivity:latest
+    image: ${BACKEND_IMAGE}
     ports:
       - '8000:8000'

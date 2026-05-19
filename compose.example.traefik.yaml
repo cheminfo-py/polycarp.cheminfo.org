@@ -25,14 +25,14 @@ services:
       - traefik
     labels:
       - traefik.enable=true
-      - traefik.http.routers.polycarp-frontend.rule=Host(`polycarp.cheminfo.org`)
+      - traefik.http.routers.polycarp-frontend.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.polycarp-frontend.entrypoints=websecure
       - traefik.http.routers.polycarp-frontend.tls=true
       - traefik.http.routers.polycarp-frontend.tls.certresolver=letsencrypt
       - traefik.http.services.polycarp-frontend.loadbalancer.server.port=80
 
   backend:
-    image: ghcr.io/lamalab-org/copolymer-reactivity:latest
+    image: ${BACKEND_IMAGE}
     restart: unless-stopped
     stop_grace_period: 30s
     security_opt:
@@ -52,7 +52,7 @@ services:
       - traefik
     labels:
       - traefik.enable=true
-      - traefik.http.routers.polycarp-backend.rule=Host(`polycarp.cheminfo.org`) && PathPrefix(`/api/`)
+      - traefik.http.routers.polycarp-backend.rule=Host(`${DOMAIN}`) && PathPrefix(`/api/`)
       - traefik.http.routers.polycarp-backend.entrypoints=websecure
       - traefik.http.routers.polycarp-backend.tls=true
       - traefik.http.routers.polycarp-backend.tls.certresolver=letsencrypt
