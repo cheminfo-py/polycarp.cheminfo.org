@@ -94,6 +94,7 @@ export function PredictTab() {
     }
     setLoading(true);
     setError(null);
+    setResults(null);
 
     const params: PredictParams = {
       monomer1Smiles,
