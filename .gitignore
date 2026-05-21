@@ -10,3 +10,6 @@ compose.yaml
 # Frontend build artifacts
 frontend/node_modules/
 frontend/dist/
+
+# Test coverage
+coverage/
