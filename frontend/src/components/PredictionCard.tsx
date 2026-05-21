@@ -1,18 +1,5 @@
+import { classColor } from '../archColors.ts';
 import type { PredictResponse } from '../types.ts';
-
-const CLASS_COLORS: Record<number, string> = {
-  0: '#1c3d6e',
-  1: '#7b2929',
-  2: '#b5621e',
-};
-
-function classColor(name: string, index?: number): string {
-  if (index !== undefined && CLASS_COLORS[index]) return CLASS_COLORS[index];
-  const lower = name.toLowerCase();
-  if (lower.includes('random')) return CLASS_COLORS[0];
-  if (lower.includes('block')) return CLASS_COLORS[1];
-  return CLASS_COLORS[2];
-}
 
 interface Props {
   prediction: PredictResponse;

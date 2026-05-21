@@ -22,8 +22,8 @@ export function AboutTab() {
         property therefore begins with designing for a target architecture.
       </p>
       <p>
-        Reactivity ratios — the central quantity behind copolymer architecture
-        — have been known since Mayo and Lewis (1944) to depend on solvent,
+        Reactivity ratios — the central quantity behind copolymer architecture —
+        have been known since Mayo and Lewis (1944) to depend on solvent,
         temperature, and polymerization mechanism. Yet every prior predictive
         approach, from the Q–e scheme of Alfrey and Price to recent
         machine-learning models, takes monomer structure alone as input and
@@ -86,7 +86,7 @@ export function AboutTab() {
         The tool was validated against a literature case study in which it
         correctly captures solvent-driven architectural transitions, and against
         three prospective laboratory copolymerizations carried out specifically
-        to test the model's predictions.
+        to test the model&apos;s predictions.
       </p>
 
       <h2>Citation</h2>

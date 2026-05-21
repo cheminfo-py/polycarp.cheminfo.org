@@ -30,7 +30,8 @@ export function UserGuideTab() {
             <ul>
               <li>
                 <strong>Monomer 1</strong> and <strong>Monomer 2</strong> are
-                treated symmetrically — the order does not affect the prediction.
+                treated symmetrically — the order does not affect the
+                prediction.
               </li>
               <li>
                 Predictions are most reliable for common vinyl monomers.
@@ -47,17 +48,17 @@ export function UserGuideTab() {
           <div className="guide-step-body">
             <h3>Set reaction conditions</h3>
             <p>
-              Copolymer architecture depends strongly on conditions — this is the
-              core insight behind PolyCarp. Set all four parameters before
+              Copolymer architecture depends strongly on conditions — this is
+              the core insight behind PolyCarp. Set all four parameters before
               running a prediction:
             </p>
             <dl className="guide-params">
               <dt>Solvent</dt>
               <dd>
                 Draw or select the solvent molecule. The model uses the
-                solvent's log<em>P</em> as a feature. If the monomer–solvent
-                pair is predicted to have compatibility issues, a solubility
-                warning is shown alongside the results.
+                solvent&apos;s log<em>P</em> as a feature. If the
+                monomer–solvent pair is predicted to have compatibility issues,
+                a solubility warning is shown alongside the results.
               </dd>
               <dt>Temperature (°C)</dt>
               <dd>
@@ -73,9 +74,9 @@ export function UserGuideTab() {
               <dt>Polymerization type</dt>
               <dd>
                 The initiation mechanism: free radical, controlled/living
-                radical (ATRP, RAFT), cationic, anionic, coordination, etc.
-                Free radical is the most data-rich category. Use <em>n/a</em>{' '}
-                if unknown.
+                radical (ATRP, RAFT), cationic, anionic, coordination, etc. Free
+                radical is the most data-rich category. Use <em>n/a</em> if
+                unknown.
               </dd>
             </dl>
           </div>
@@ -102,11 +103,11 @@ export function UserGuideTab() {
       <p>
         The top card shows the predicted architecture class — <em>random</em>,{' '}
         <em>alternating</em>, or <em>gradient/block-like</em> — together with
-        the classifier's confidence (the probability assigned to the winning
-        class) and a full probability table across all three classes. A
-        confidence below roughly 50 % indicates the system is near a
-        class boundary; in such cases the condition optimisation grid is
-        especially informative.
+        the classifier&apos;s confidence (the probability assigned to the
+        winning class) and a full probability table across all three classes. A
+        confidence below roughly 50 % indicates the system is near a class
+        boundary; in such cases the condition optimisation grid is especially
+        informative.
       </p>
 
       <h3>Condition optimisation grid</h3>
@@ -127,16 +128,16 @@ export function UserGuideTab() {
         <li>
           The <strong>Solvent set</strong> selector lets you focus on top
           predicted solvents, common lab solvents, chlorinated, or aromatic
-          solvents. The <strong>Temperature range</strong> selector controls
-          the sweep extent and step size.
+          solvents. The <strong>Temperature range</strong> selector controls the
+          sweep extent and step size.
         </li>
       </ul>
 
       <h3>Architecture switch (counterfactual)</h3>
       <p>
         This card reports the minimal change in conditions that would flip the
-        predicted architecture — for example, switching from toluene at 60 °C
-        to DMF at 80 °C to move from random to alternating. It is useful for
+        predicted architecture — for example, switching from toluene at 60 °C to
+        DMF at 80 °C to move from random to alternating. It is useful for
         designing experiments that probe the architecture boundary and for
         understanding which condition levers have the largest effect.
       </p>
@@ -180,15 +181,15 @@ export function UserGuideTab() {
         </li>
         <li>
           <strong>Reactivity ratios vs. architecture.</strong> PolyCarp predicts
-          the architecture class directly, not individual reactivity ratios
-          (r₁, r₂). The architecture class is derived from the product r₁ × r₂
-          and the ratio r₁/r₂, so some information is deliberately abstracted.
+          the architecture class directly, not individual reactivity ratios (r₁,
+          r₂). The architecture class is derived from the product r₁ × r₂ and
+          the ratio r₁/r₂, so some information is deliberately abstracted.
         </li>
         <li>
           <strong>Solubility warnings.</strong> When the model detects a
-          potential incompatibility between the monomer and solvent log<em>P</em>{' '}
-          values it shows a warning. This does not prevent prediction but
-          suggests the experiment may not be feasible as described.
+          potential incompatibility between the monomer and solvent log
+          <em>P</em> values it shows a warning. This does not prevent prediction
+          but suggests the experiment may not be feasible as described.
         </li>
         <li>
           <strong>API access.</strong> All predictions are also available

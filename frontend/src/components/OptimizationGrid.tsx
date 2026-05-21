@@ -1,22 +1,7 @@
+import { ARCH_COLORS, cellBackground } from '../archColors.ts';
 import type { OptimizePrediction } from '../types.ts';
 
-const CLASS_COLORS = ['#1c3d6e', '#7b2929', '#b5621e'];
 const CLASS_NAMES = ['class_0', 'class_1', 'class_2'];
-
-function cellBackground(classIndex: number, confidence: number): string {
-  const hex = CLASS_COLORS[classIndex] ?? '#555';
-  const r1 = 240;
-  const g1 = 244;
-  const b1 = 248;
-  const r2 = Number.parseInt(hex.slice(1, 3), 16);
-  const g2 = Number.parseInt(hex.slice(3, 5), 16);
-  const b2 = Number.parseInt(hex.slice(5, 7), 16);
-  const t = 0.4 + confidence * 0.6;
-  const r = Math.round(r1 + (r2 - r1) * t);
-  const g = Math.round(g1 + (g2 - g1) * t);
-  const b = Math.round(b1 + (b2 - b1) * t);
-  return `rgb(${r},${g},${b})`;
-}
 
 function textColor(confidence: number): string {
   return confidence >= 0.5 ? 'white' : '#1c2127';
@@ -119,7 +104,7 @@ export function OptimizationGrid({ predictions }: Props) {
           <div key={name} className="optim-legend-item">
             <div
               className="optim-legend-swatch"
-              style={{ background: CLASS_COLORS[i] }}
+              style={{ background: ARCH_COLORS[i] }}
             />
             {name}
           </div>

@@ -1,22 +1,8 @@
+import { archColor } from '../archColors.ts';
 import type { NearestNeighbor } from '../types.ts';
 
 import { DoiButton } from './DoiButton.tsx';
 import { MoleculeDisplay } from './MoleculeDisplay.tsx';
-
-const CLASS_COLORS: Record<string, string> = {
-  random: '#1c3d6e',
-  block: '#7b2929',
-  'block like': '#7b2929',
-  alternating: '#b5621e',
-};
-
-function archColor(name: string): string {
-  const lower = name.toLowerCase();
-  for (const [key, color] of Object.entries(CLASS_COLORS)) {
-    if (lower.includes(key)) return color;
-  }
-  return '#555';
-}
 
 interface Props {
   neighbors: NearestNeighbor[];

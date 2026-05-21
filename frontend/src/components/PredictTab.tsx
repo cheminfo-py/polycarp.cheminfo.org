@@ -211,10 +211,12 @@ export function PredictTab() {
 
         <div className="predict-btn-row">
           <Button
-            large
+            size="large"
             intent="primary"
             loading={loading}
-            onClick={handlePredict}
+            onClick={() => {
+              void handlePredict();
+            }}
             icon="predictive-analysis"
           >
             Predict class
