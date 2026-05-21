@@ -2,16 +2,28 @@ import { useState } from 'react';
 
 import { BRAND_AMBER, BRAND_NAVY } from './colors.ts';
 import { AboutTab } from './components/AboutTab.tsx';
-import { DataTab } from './components/DataTab.tsx';
 import { CarpIcon } from './components/Logo.tsx';
 import { PredictTab } from './components/PredictTab.tsx';
+import { ResultsTab } from './components/ResultsTab.tsx';
 import { UserGuideTab } from './components/UserGuideTab.tsx';
 
-type TabId = 'predict' | 'data' | 'guide' | 'about';
+type TabId = 'predict' | 'results' | 'guide' | 'about';
 
-const TABS: Array<{ id: TabId; label: string }> = [
+/** The database is browsed in the NOMAD polymerization OASIS, not in-app. */
+const NOMAD_DATA_URL =
+  'https://nomad-lab.eu/prod/v1/oasis/gui/search/polymerization';
+
+/** A nav entry is either an in-app tab (`id`) or an external link (`href`). */
+interface NavEntry {
+  label: string;
+  id?: TabId;
+  href?: string;
+}
+
+const TABS: NavEntry[] = [
   { id: 'predict', label: 'Prediction' },
-  { id: 'data', label: 'Data' },
+  { href: NOMAD_DATA_URL, label: 'Data' },
+  { id: 'results', label: 'Results' },
   { id: 'guide', label: 'User Guide' },
   { id: 'about', label: 'About' },
 ];
@@ -38,22 +50,34 @@ export function App() {
 
         {/* ── Nav ── */}
         <nav className="app-nav">
-          {TABS.map(({ id, label }) => (
-            <button
-              key={id}
-              type="button"
-              className={`app-nav-btn${active === id ? ' active' : ''}`}
-              onClick={() => setActive(id)}
-            >
-              {label}
-            </button>
-          ))}
+          {TABS.map((entry) =>
+            entry.href ? (
+              <a
+                key={entry.label}
+                className="app-nav-btn"
+                href={entry.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {entry.label}
+              </a>
+            ) : (
+              <button
+                key={entry.label}
+                type="button"
+                className={`app-nav-btn${active === entry.id ? ' active' : ''}`}
+                onClick={() => entry.id && setActive(entry.id)}
+              >
+                {entry.label}
+              </button>
+            ),
+          )}
         </nav>
       </header>
 
       <div className="app-content">
         {active === 'predict' && <PredictTab />}
-        {active === 'data' && <DataTab />}
+        {active === 'results' && <ResultsTab />}
         {active === 'guide' && <UserGuideTab />}
         {active === 'about' && <AboutTab />}
       </div>

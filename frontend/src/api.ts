@@ -1,6 +1,7 @@
 import type {
   ArchitectureSwitchResponse,
   OptimizeResponse,
+  PaperMetricsResponse,
   PredictResponse,
   PredictionResults,
   PreprocessResponse,
@@ -19,6 +20,16 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
     throw new Error(`API error ${response.status}: ${text}`);
   }
   return response.json() as Promise<T>;
+}
+
+/** Fetches the precomputed train/test performance results (Results tab). */
+export async function fetchPaperMetrics(): Promise<PaperMetricsResponse> {
+  const response = await fetch(`${API_URL}/paper_metrics`);
+  if (!response.ok) {
+    const text = await response.text().catch(() => response.statusText);
+    throw new Error(`API error ${response.status}: ${text}`);
+  }
+  return response.json() as Promise<PaperMetricsResponse>;
 }
 
 export interface PredictParams {

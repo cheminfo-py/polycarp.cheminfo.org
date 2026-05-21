@@ -101,3 +101,56 @@ export interface PredictionResults {
   rxnopt: OptimizePrediction[];
   architectureSwitch: ArchitectureSwitchResponse | null;
 }
+
+// ── /paper_metrics — precomputed train/test performance ──────────────
+
+export interface ClassMetrics {
+  acc: number;
+  prec: number;
+  f1: number;
+}
+
+export interface ModelMetrics {
+  confusion_matrix: number[][];
+  per_class: Record<string, ClassMetrics>;
+  accuracy?: number; // plain XGBoost only
+  coverage?: number; // voting only
+  retained?: number; // voting only
+}
+
+export interface IndividualPrediction {
+  monomer1_smiles: string;
+  monomer2_smiles: string;
+  monomer1_name: string | null;
+  monomer2_name: string | null;
+  solvent_name: string | null;
+  solvent_smiles: string | null;
+  temperature: number | null;
+  method: string | null;
+  polytype: string | null;
+  true_class: number;
+  true_class_name: string;
+  xgb_class: number;
+  xgb_class_name: string;
+  confidence: number;
+  lookup_class: number;
+  lookup_class_name: string;
+  lookup_similarity: number;
+  agree: boolean;
+  correct: boolean;
+  doi: string | null;
+  doi_url: string | null;
+}
+
+export interface SplitMetrics {
+  n: number;
+  xgboost: ModelMetrics;
+  voting: ModelMetrics;
+  predictions: IndividualPrediction[];
+}
+
+export interface PaperMetricsResponse {
+  classes: string[];
+  generated_at: string;
+  splits: { train: SplitMetrics; test: SplitMetrics };
+}
