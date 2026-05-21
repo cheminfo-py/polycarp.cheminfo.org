@@ -1,8 +1,6 @@
 import { ARCH_COLORS, cellBackground } from '../archColors.ts';
 import type { OptimizePrediction } from '../types.ts';
 
-const CLASS_NAMES = ['class_0', 'class_1', 'class_2'];
-
 function textColor(confidence: number): string {
   return confidence >= 0.5 ? 'white' : '#1c2127';
 }
@@ -40,6 +38,14 @@ export function OptimizationGrid({ predictions }: Props) {
 
   const temperatures = [...tempSet].toSorted((a, b) => a - b);
   const solvents = [...solventMap.entries()];
+
+  const classNames = new Map<number, string>();
+  for (const p of predictions) {
+    if (!classNames.has(p.predicted_class)) {
+      classNames.set(p.predicted_class, p.predicted_class_name);
+    }
+  }
+  const legendEntries = [...classNames.entries()].toSorted(([a], [b]) => a - b);
 
   return (
     <div className="optim-card">
@@ -100,11 +106,11 @@ export function OptimizationGrid({ predictions }: Props) {
       </div>
 
       <div className="optim-legend">
-        {CLASS_NAMES.map((name, i) => (
-          <div key={name} className="optim-legend-item">
+        {legendEntries.map(([classIdx, name]) => (
+          <div key={classIdx} className="optim-legend-item">
             <div
               className="optim-legend-swatch"
-              style={{ background: ARCH_COLORS[i] }}
+              style={{ background: ARCH_COLORS[classIdx] }}
             />
             {name}
           </div>
