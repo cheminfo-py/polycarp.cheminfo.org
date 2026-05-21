@@ -1,3 +1,4 @@
+import type {TabId} from '@blueprintjs/core';
 import {
   Button,
   FormGroup,
@@ -5,8 +6,8 @@ import {
   NumericInput,
   Spinner,
   Tab,
-  Tabs,
-  type TabId,
+  
+  Tabs
 } from '@blueprintjs/core';
 import { useCallback, useState } from 'react';
 

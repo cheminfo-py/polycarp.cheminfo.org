@@ -42,6 +42,8 @@ function sortValue(n: NearestNeighbor, key: SortKey): number | string {
       return n.polytype.toLowerCase();
     case 'arch':
       return n.predicted_class_name.toLowerCase();
+    default:
+      throw new Error(`Unknown sort key: ${String(key)}`);
   }
 }
 
@@ -105,7 +107,7 @@ export function NearestResults({ neighbors }: Props) {
   const archOptions = useMemo(() => {
     const distinct = [
       ...new Set(neighbors.map((n) => n.predicted_class_name)),
-    ].sort((a, b) => a.localeCompare(b));
+    ].toSorted((a, b) => a.localeCompare(b));
     return [
       { label: 'All architectures', value: ALL_ARCH },
       ...distinct.map((a) => ({ label: a, value: a })),
@@ -129,7 +131,7 @@ export function NearestResults({ neighbors }: Props) {
 
   /** Filtered neighbors sorted by the active column and direction. */
   const rows = useMemo(() => {
-    const sorted = [...filtered].sort((a, b) => {
+    const sorted = filtered.toSorted((a, b) => {
       const va = sortValue(a, sort.key);
       const vb = sortValue(b, sort.key);
       let cmp = 0;
