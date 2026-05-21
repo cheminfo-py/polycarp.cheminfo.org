@@ -1,48 +1,62 @@
-/** Hex colors for the three polymer architecture classes (random, block, alternating). */
+/**
+ * Hex colors for the three polymer architecture classes, indexed by the real
+ * model class index (matches the backend `CLASS_LABELS` in
+ * `copol_prediction/api/app.py`):
+ *   [0] = alternating
+ *   [1] = random to block like
+ *   [2] = gradient
+ */
 export const ARCH_COLORS: readonly [string, string, string] = [
-  '#1c3d6e',
-  '#7b2929',
-  '#b5621e',
+  '#1c3d6e', // 0 = alternating
+  '#7b2929', // 1 = random to block like
+  '#b5621e', // 2 = gradient
 ];
 
-/** Name-keyed map used for substring-based colour lookup. */
-const ARCH_COLOR_MAP: Record<string, string> = {
-  random: ARCH_COLORS[0],
-  block: ARCH_COLORS[1],
-  'block like': ARCH_COLORS[1],
-  alternating: ARCH_COLORS[2],
-};
+/**
+ * Resolves a class name to its canonical model class index.
+ * Matches by substring (case-insensitive) and tolerates loose names
+ * (e.g. `"random"`, `"block"`). Returns `undefined` for unknown strings.
+ * @param name - Predicted class name, e.g. `"alternating"`, `"random to block like"`, `"gradient"`.
+ * @returns Zero-based class index, or `undefined` if the name is unrecognized.
+ */
+function classIndexForName(name: string): number | undefined {
+  const lower = name.toLowerCase();
+  if (lower.includes('gradient')) return 2;
+  if (lower.includes('alternating')) return 0;
+  // `"random to block like"` plus loose variants like `"random"` / `"block"`.
+  if (lower.includes('random') || lower.includes('block')) return 1;
+  return undefined;
+}
 
 /**
  * Returns the architecture colour for a predicted class name.
- * Matches by substring (case-insensitive). Falls back to `'#555'`.
- * @param name - Predicted class name, e.g. `"random"`, `"block"`, `"alternating"`.
+ * Resolves the name to its canonical class index so the result matches what
+ * `classColor` would return for the same class. Falls back to `'#555'` for
+ * genuinely unknown names.
+ * @param name - Predicted class name, e.g. `"alternating"`, `"random to block like"`, `"gradient"`.
  * @returns Hex colour string.
  */
 export function archColor(name: string): string {
-  const lower = name.toLowerCase();
-  for (const [key, color] of Object.entries(ARCH_COLOR_MAP)) {
-    if (lower.includes(key)) return color;
-  }
-  return '#555';
+  const index = classIndexForName(name);
+  return index === undefined ? '#555' : ARCH_COLORS[index];
 }
 
 /**
  * Returns the architecture colour by numeric class index, or falls back to
- * a substring match on the class name when no index is given.
+ * a name-based lookup when no index is given.
  * @param name - Predicted class name used as fallback when index is absent.
- * @param index - Zero-based class index (0 = random, 1 = block, 2 = alternating).
+ * @param index - Zero-based class index (0 = alternating, 1 = random to block like, 2 = gradient).
  * @returns Hex colour string.
  */
 export function classColor(name: string, index?: number): string {
-  if (index !== undefined) return ARCH_COLORS[index] ?? ARCH_COLORS[2];
+  if (index !== undefined) return ARCH_COLORS[index] ?? archColor(name);
   return archColor(name);
 }
 
 /**
  * Returns an RGB background colour for a heatmap cell.
  * Interpolates from `#f0f4f8` (low confidence) toward the class colour (high).
- * @param classIndex - Zero-based class index (0 = random, 1 = block, 2 = alternating).
+ * @param classIndex - Zero-based class index (0 = alternating, 1 = random to block like, 2 = gradient).
  * @param confidence - Classifier confidence in [0, 1].
  * @returns CSS `rgb(...)` string.
  */
