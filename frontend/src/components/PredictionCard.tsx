@@ -60,8 +60,9 @@ export function PredictionCard({ prediction, solubilityIssue }: Props) {
       <div className="class-probs-title">Class Probabilities</div>
       <table className="class-probs-table">
         <tbody>
-          {sortedProbs.map(([name, prob], i) => {
-            const color = classColor(name, i);
+          {sortedProbs.map(([name, prob]) => {
+            // Colour by the class name, not the sorted-rank loop index.
+            const color = classColor(name);
             const isPredicted =
               name.toLowerCase() === predictedClassName.toLowerCase();
             return (
