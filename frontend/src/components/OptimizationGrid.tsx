@@ -1,0 +1,133 @@
+import type { OptimizePrediction } from '../types.ts';
+
+const CLASS_COLORS = ['#1c3d6e', '#7b2929', '#b5621e'];
+const CLASS_NAMES = ['class_0', 'class_1', 'class_2'];
+
+function cellBackground(classIndex: number, confidence: number): string {
+  const hex = CLASS_COLORS[classIndex] ?? '#555';
+  const r1 = 240;
+  const g1 = 244;
+  const b1 = 248;
+  const r2 = Number.parseInt(hex.slice(1, 3), 16);
+  const g2 = Number.parseInt(hex.slice(3, 5), 16);
+  const b2 = Number.parseInt(hex.slice(5, 7), 16);
+  const t = 0.4 + confidence * 0.6;
+  const r = Math.round(r1 + (r2 - r1) * t);
+  const g = Math.round(g1 + (g2 - g1) * t);
+  const b = Math.round(b1 + (b2 - b1) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+function textColor(confidence: number): string {
+  return confidence >= 0.5 ? 'white' : '#1c2127';
+}
+
+interface Props {
+  predictions: OptimizePrediction[];
+}
+
+/**
+ * Heat-map grid of predicted polymer architectures across solvents and temperatures.
+ * @param root0
+ * @param root0.predictions
+ */
+export function OptimizationGrid({ predictions }: Props) {
+  if (predictions.length === 0) return null;
+
+  // Build pivot: solvent → temperature → prediction
+  const solventMap = new Map<
+    string,
+    { logp: number; byTemp: Map<number, OptimizePrediction> }
+  >();
+  const tempSet = new Set<number>();
+
+  for (const p of predictions) {
+    tempSet.add(p.temperature);
+    if (!solventMap.has(p.solvent_name)) {
+      solventMap.set(p.solvent_name, {
+        logp: p.solvent_logp,
+        byTemp: new Map(),
+      });
+    }
+    const entry = solventMap.get(p.solvent_name);
+    if (entry) entry.byTemp.set(p.temperature, p);
+  }
+
+  const temperatures = [...tempSet].toSorted((a, b) => a - b);
+  const solvents = [...solventMap.entries()];
+
+  return (
+    <div className="optim-card">
+      <h2>Reaction condition optimization</h2>
+      <div className="optim-grid-wrap">
+        <table className="optim-grid">
+          <thead>
+            <tr>
+              <th className="solvent-col">Solvent</th>
+              {temperatures.map((t) => (
+                <th key={t}>{t}°C</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {solvents.map(([solventName, { logp, byTemp }]) => (
+              <tr key={solventName}>
+                <td className="optim-solvent-cell">
+                  <div className="optim-solvent-name">{solventName}</div>
+                  <div className="optim-solvent-logp">
+                    logP {logp.toFixed(2)}
+                  </div>
+                </td>
+                {temperatures.map((t) => {
+                  const pred = byTemp.get(t);
+                  if (!pred) return <td key={t}>—</td>;
+                  const bg = cellBackground(
+                    pred.predicted_class,
+                    pred.confidence,
+                  );
+                  const fg = textColor(pred.confidence);
+                  return (
+                    <td key={t} style={{ padding: '4px' }}>
+                      <div
+                        className={`optim-pred-cell${pred.solubility_issue ? ' solubility-issue' : ''}`}
+                        style={{
+                          background: bg,
+                          color: fg,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: 4,
+                          height: 40,
+                          fontWeight: 700,
+                          fontSize: '0.85rem',
+                        }}
+                        title={`${pred.predicted_class_name} — ${(pred.confidence * 100).toFixed(1)}% confidence`}
+                      >
+                        {(pred.confidence * 100).toFixed(1)}%
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="optim-legend">
+        {CLASS_NAMES.map((name, i) => (
+          <div key={name} className="optim-legend-item">
+            <div
+              className="optim-legend-swatch"
+              style={{ background: CLASS_COLORS[i] }}
+            />
+            {name}
+          </div>
+        ))}
+        <div className="optim-legend-item" style={{ marginLeft: 'auto' }}>
+          <span style={{ fontSize: 11 }}>⚠ solubility issue</span>
+        </div>
+      </div>
+    </div>
+  );
+}
