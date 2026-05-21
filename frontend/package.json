@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
+    "@types/swagger-ui-react": "^5.18.0",
     "@vitejs/plugin-react": "^4.5.2",
     "eslint": "^9.39.4",
     "eslint-config-cheminfo-react": "^20.0.1",

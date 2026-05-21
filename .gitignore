@@ -6,3 +6,7 @@ compose.yaml
 
 # Claude Code
 .claude/
+
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/

@@ -1,71 +1,102 @@
-/** Static about page describing PolyCarp's approach and citation. */
+/** About page — scientific background, dataset, and citation for PolyCarp. */
 export function AboutTab() {
   return (
     <div className="about-content">
-      <h2>About PolyCarp</h2>
+      <h2>What is PolyCarp?</h2>
       <p>
-        <strong>PolyCarp</strong> (Copolymer Reactivity Prediction) is a
-        machine-learning tool for predicting the microstructure of radical
-        copolymers. Given two monomers, a solvent, and reaction conditions, it
-        predicts whether the resulting copolymer will have a <em>random</em>,{' '}
-        <em>block-like</em>, or <em>alternating</em> architecture.
+        <strong>PolyCarp</strong> (Copolymer Architecture Reactivity Predictor)
+        is a condition-aware machine-learning tool that predicts the
+        microstructure of radical copolymers. Given two monomers together with
+        reaction conditions — solvent, temperature, and polymerization mechanism
+        — it classifies the resulting copolymer as <em>random</em>,{' '}
+        <em>alternating</em>, or <em>gradient/block-like</em> and retrieves the
+        closest experimental analogues from a curated literature database.
       </p>
 
-      <h2>How it works</h2>
+      <h2>Why does copolymer architecture matter?</h2>
       <p>
-        The model combines molecular descriptors computed with{' '}
-        <strong>XTB</strong> (extended tight-binding) with a gradient-boosted
-        classifier trained on a curated literature database of copolymer
-        synthesis experiments. Reaction conditions (temperature, polymerization
-        method and type) and solvent properties (logP) are incorporated as
-        additional features.
+        The architecture of a statistical copolymer determines how the material
+        behaves: an alternating sequence distributes co-monomers evenly, a
+        random sequence gives statistical mixing, and a gradient or block-like
+        sequence creates domain separation. Designing a polymer for a target
+        property therefore begins with designing for a target architecture.
       </p>
-      <p>The prediction pipeline runs four steps automatically:</p>
+      <p>
+        Reactivity ratios — the central quantity behind copolymer architecture
+        — have been known since Mayo and Lewis (1944) to depend on solvent,
+        temperature, and polymerization mechanism. Yet every prior predictive
+        approach, from the Q–e scheme of Alfrey and Price to recent
+        machine-learning models, takes monomer structure alone as input and
+        ignores conditions entirely. PolyCarp closes this gap by explicitly
+        incorporating reaction conditions.
+      </p>
+
+      <h2>The database</h2>
+      <p>
+        Measurements for thousands of monomer pairs exist but are scattered
+        across eight decades of heterogeneous literature, including publications
+        predating digital archiving. We developed a vision–language-model
+        pipeline that parses typeset tables and scanned figures, yielding{' '}
+        <strong>3,792 copolymerizations</strong> from{' '}
+        <strong>1,206 publications</strong>, each annotated with reactivity
+        ratios, solvent, temperature, and polymerization mechanism. This is, to
+        our knowledge, the first dataset at this scale to record reaction
+        conditions per entry.
+      </p>
+      <p>
+        The full database is openly available alongside the model and this web
+        interface. You can browse monomers and solvents in the{' '}
+        <strong>Data</strong> tab.
+      </p>
+
+      <h2>The model</h2>
+      <p>
+        The predictor combines molecular descriptors computed with{' '}
+        <strong>XTB</strong> (extended tight-binding semi-empirical quantum
+        chemistry) with a gradient-boosted classifier trained on the literature
+        database. Solvent properties (log<em>P</em>), temperature, and
+        polymerization type are incorporated as additional features alongside
+        the monomer descriptors. The prediction pipeline runs four steps
+        automatically:
+      </p>
       <ol>
         <li>
-          <strong>Preprocessing</strong> — XTB molecular descriptors are
-          computed (or fetched from cache) and the nearest database neighbours
-          are identified via fingerprint similarity.
+          <strong>Preprocessing</strong> — XTB descriptors are computed (or
+          fetched from cache) for the two monomers, and the nearest database
+          neighbours are identified via fingerprint similarity.
         </li>
         <li>
-          <strong>Class prediction</strong> — The classifier returns class
-          probabilities and a predicted architecture.
+          <strong>Architecture prediction</strong> — The classifier returns
+          class probabilities and a predicted architecture label.
         </li>
         <li>
-          <strong>Condition optimisation</strong> — A sweep over solvents and
-          temperatures shows how the prediction changes across conditions.
+          <strong>Condition optimisation</strong> — A systematic sweep over
+          solvents and temperatures shows how the predicted architecture changes
+          across the condition space.
         </li>
         <li>
-          <strong>Architecture-switch search</strong> — The tool searches for
-          the minimal change in conditions that would flip the predicted
-          architecture (counterfactual analysis).
+          <strong>Architecture-switch search</strong> — Counterfactual analysis
+          identifies the minimal change in conditions that would flip the
+          predicted architecture, highlighting which conditions are decisive.
         </li>
       </ol>
 
-      <h2>Usage notes</h2>
-      <ul>
-        <li>
-          Draw monomers and solvent in the editors on the left, or pick a
-          structure from the template library.
-        </li>
-        <li>
-          The first prediction may take up to a minute if XTB descriptors are
-          not yet cached.
-        </li>
-        <li>
-          Predictions are most reliable for common vinyl monomers. Unusual
-          functional groups may fall outside the training distribution.
-        </li>
-        <li>
-          A solubility-issue warning is shown when the model detects potential
-          compatibility problems between monomer and solvent.
-        </li>
-      </ul>
+      <h2>Validation</h2>
+      <p>
+        The tool was validated against a literature case study in which it
+        correctly captures solvent-driven architectural transitions, and against
+        three prospective laboratory copolymerizations carried out specifically
+        to test the model's predictions.
+      </p>
 
       <h2>Citation</h2>
       <p>
-        If you use PolyCarp in your research, please cite the corresponding
-        publication. See the{' '}
+        If you use PolyCarp or the underlying database in your research, please
+        cite the corresponding publication:
+      </p>
+      <blockquote className="about-citation">
+        Predicting copolymer architecture from literature-extracted data.{' '}
+        <em>Manuscript in preparation.</em> See the{' '}
         <a
           href="https://github.com/lamalab-org/copolymer-reactivity"
           target="_blank"
@@ -73,7 +104,15 @@ export function AboutTab() {
         >
           GitHub repository
         </a>{' '}
-        for details.
+        for the latest preprint and dataset.
+      </blockquote>
+
+      <h2>Open availability</h2>
+      <p>
+        The database, trained model, and this web interface are all openly
+        available under permissive licences. Programmatic access is provided via
+        a REST API — see the <strong>API</strong> tab for interactive
+        documentation.
       </p>
 
       <h2>Technical stack</h2>
@@ -99,7 +138,7 @@ export function AboutTab() {
           react-ocl
         </a>{' '}
         (OpenChemLib). Backend powered by a Python/FastAPI service running XTB
-        calculations.
+        calculations and serving the curated database.
       </p>
     </div>
   );

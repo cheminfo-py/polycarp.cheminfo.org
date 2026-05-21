@@ -5,12 +5,14 @@ import { AboutTab } from './components/AboutTab.tsx';
 import { DataTab } from './components/DataTab.tsx';
 import { CarpIcon } from './components/Logo.tsx';
 import { PredictTab } from './components/PredictTab.tsx';
+import { UserGuideTab } from './components/UserGuideTab.tsx';
 
-type TabId = 'predict' | 'data' | 'about';
+type TabId = 'predict' | 'data' | 'guide' | 'about';
 
 const TABS: Array<{ id: TabId; label: string }> = [
   { id: 'predict', label: 'Prediction' },
   { id: 'data', label: 'Data' },
+  { id: 'guide', label: 'User Guide' },
   { id: 'about', label: 'About' },
 ];
 
@@ -52,6 +54,7 @@ export function App() {
       <div className="app-content">
         {active === 'predict' && <PredictTab />}
         {active === 'data' && <DataTab />}
+        {active === 'guide' && <UserGuideTab />}
         {active === 'about' && <AboutTab />}
       </div>
     </div>

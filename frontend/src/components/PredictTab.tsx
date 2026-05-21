@@ -1,4 +1,10 @@
-import { Button, FormGroup, HTMLSelect, NumericInput, Spinner } from '@blueprintjs/core';
+import {
+  Button,
+  FormGroup,
+  HTMLSelect,
+  NumericInput,
+  Spinner,
+} from '@blueprintjs/core';
 import { useCallback, useState } from 'react';
 
 import type { PredictParams } from '../api.ts';
@@ -35,7 +41,10 @@ const METHODS = [
 const POLYTYPES = [
   { label: 'n/a', value: 'n/a' },
   { label: 'Free radical', value: 'free radical' },
-  { label: 'Controlled/Living radical (ATRP, RAFT…)', value: 'controlled/living radical' },
+  {
+    label: 'Controlled/Living radical (ATRP, RAFT…)',
+    value: 'controlled/living radical',
+  },
   { label: 'Cationic', value: 'cationic' },
   { label: 'Anionic', value: 'anionic' },
   { label: 'Coordination (Ziegler–Natta, metallocene)', value: 'coordination' },
@@ -78,7 +87,9 @@ export function PredictTab() {
 
   const handlePredict = useCallback(async () => {
     if (!monomer1Smiles || !monomer2Smiles || !solventSmiles) {
-      setError('Please draw all three structures (Monomer 1, Monomer 2, Solvent).');
+      setError(
+        'Please draw all three structures (Monomer 1, Monomer 2, Solvent).',
+      );
       return;
     }
     setLoading(true);
@@ -98,8 +109,8 @@ export function PredictTab() {
     try {
       const res = await runPrediction(params);
       setResults(res);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (error_) {
+      setError(error_ instanceof Error ? error_.message : String(error_));
     } finally {
       setLoading(false);
     }

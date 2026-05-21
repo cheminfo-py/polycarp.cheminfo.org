@@ -18,7 +18,12 @@ interface Props {
 const EDITOR_W = 680;
 const EDITOR_H = 460;
 
-export function MoleculeEditor({ label, smiles, onSmilesChange, templates }: Props) {
+export function MoleculeEditor({
+  label,
+  smiles,
+  onSmilesChange,
+  templates,
+}: Props) {
   const [editorKey, setEditorKey] = useState(0);
   const [draftSmiles, setDraftSmiles] = useState(smiles);
   const [showEditor, setShowEditor] = useState(false);
@@ -30,10 +35,13 @@ export function MoleculeEditor({ label, smiles, onSmilesChange, templates }: Pro
     setShowEditor(true);
   }, [smiles]);
 
-  const handleEditorChange = useCallback((event: CanvasEditorOnChangeMolecule) => {
-    const newSmiles = event.getSmiles();
-    if (newSmiles) setDraftSmiles(newSmiles);
-  }, []);
+  const handleEditorChange = useCallback(
+    (event: CanvasEditorOnChangeMolecule) => {
+      const newSmiles = event.getSmiles();
+      if (newSmiles) setDraftSmiles(newSmiles);
+    },
+    [],
+  );
 
   const handleDone = useCallback(() => {
     onSmilesChange(draftSmiles);
