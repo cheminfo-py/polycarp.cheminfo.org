@@ -1223,3 +1223,33 @@ body {
   box-shadow: none;
   padding: 0;
 }
+
+/* ── Same-monomer literature rows ──────────────────────────── */
+
+/*
+ * The nearest-neighbour lookup guarantees a slot to literature reactions
+ * that use the exact same monomer pair as the query, even when an unusual
+ * solvent would otherwise drop them out of the top-k. These rows are marked
+ * so an exact-pair match is distinguishable from a similarity-ranked one.
+ */
+
+.nearest-table tr.is-same-monomer {
+  background: #fff6e6;
+}
+
+.nearest-table tr.is-same-monomer:hover {
+  background: #ffedcc;
+}
+
+.same-monomer-badge {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #f5a623;
+  color: #3a2a06;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}

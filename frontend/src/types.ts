@@ -10,6 +10,8 @@ export interface NearestNeighbor {
   polytype: string;
   predicted_class_name: string;
   similarity: number;
+  /** True when this literature reaction uses the exact same monomer pair as the query. */
+  same_monomer?: boolean;
   doi?: string;
   doi_url?: string;
 }
