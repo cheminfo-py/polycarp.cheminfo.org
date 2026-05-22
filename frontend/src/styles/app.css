@@ -103,12 +103,12 @@ body {
 
 .predict-layout {
   display: grid;
-  grid-template-columns: 300px 1fr 400px;
+  grid-template-columns: 300px 1fr 360px;
   gap: 16px;
   align-items: start;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   .predict-layout {
     grid-template-columns: 280px 1fr;
   }
@@ -1130,4 +1130,96 @@ body {
 .ind-pager button:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+/* ── Nearest-results sort/filter ── */
+
+.nearest-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.nearest-text-filter {
+  min-width: 220px;
+}
+
+.nearest-count {
+  font-size: 0.8rem;
+  color: #5c6570;
+  font-weight: 600;
+}
+
+.nearest-th-sort {
+  cursor: pointer;
+  user-select: none;
+}
+
+.nearest-th-sort:hover {
+  background: #e6edf4;
+}
+
+.nearest-th-sort.is-active {
+  color: #0f2044;
+}
+
+.nearest-th-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nearest-sort-icon {
+  color: #9aa5b1;
+}
+
+.nearest-th-sort.is-active .nearest-sort-icon {
+  color: #1c6fd4;
+}
+
+.nearest-empty {
+  text-align: center;
+  color: #5c6570;
+  font-style: italic;
+  padding: 18px 10px;
+}
+
+/* ── Prediction sub-tabs ───────────────────────────────────── */
+
+/*
+ * The prediction results column is rendered as Blueprint Tabs so that the
+ * "Condition optimization" and "Architecture switch" panels are no longer
+ * always-visible. Only one panel is shown at a time, which keeps the overall
+ * page narrow enough for small laptop screens.
+ */
+
+.results-subtabs {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 8px 16px 16px;
+}
+
+.results-subtabs .bp5-tab-list {
+  border-bottom: 1px solid #e8ecf0;
+  margin-bottom: 14px;
+  gap: 4px;
+}
+
+.results-subtabs .bp5-tab {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* The panels host cards that already carry their own surface styling, so the
+   tab container should not double up on padding/background for them. */
+.results-subtabs .bp5-tab-panel {
+  margin-top: 0;
+}
+
+.results-subtabs .bp5-tab-panel .prediction-card {
+  box-shadow: none;
+  padding: 0;
 }

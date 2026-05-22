@@ -1,9 +1,13 @@
+import type {TabId} from '@blueprintjs/core';
 import {
   Button,
   FormGroup,
   HTMLSelect,
   NumericInput,
   Spinner,
+  Tab,
+  
+  Tabs
 } from '@blueprintjs/core';
 import { useCallback, useState } from 'react';
 
@@ -71,6 +75,16 @@ const DEFAULT_MONOMER1 = 'C=Cc1ccccc1'; // styrene
 const DEFAULT_MONOMER2 = 'C=CC(=O)OC'; // methyl acrylate
 const DEFAULT_SOLVENT = 'ClC(Cl)Cl'; // chloroform
 
+/**
+ * Top-level Prediction page: molecule editors, polymerisation parameters and
+ * the prediction results.
+ *
+ * The results area is rendered as a set of Blueprint sub-tabs ("Prediction",
+ * "Condition optimization", "Architecture switch") so that only one results
+ * panel is visible at a time. This keeps the page narrow enough for small
+ * laptop screens. All prediction state lives here; the top-level App tabs are
+ * unaffected.
+ */
 export function PredictTab() {
   const [monomer1Smiles, setMonomer1Smiles] = useState(DEFAULT_MONOMER1);
   const [monomer2Smiles, setMonomer2Smiles] = useState(DEFAULT_MONOMER2);
@@ -84,6 +98,7 @@ export function PredictTab() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<PredictionResults | null>(null);
+  const [resultsTab, setResultsTab] = useState<TabId>('prediction');
 
   const handlePredict = useCallback(async () => {
     if (!monomer1Smiles || !monomer2Smiles || !solventSmiles) {
@@ -95,6 +110,7 @@ export function PredictTab() {
     setLoading(true);
     setError(null);
     setResults(null);
+    setResultsTab('prediction');
 
     const params: PredictParams = {
       monomer1Smiles,
@@ -241,21 +257,43 @@ export function PredictTab() {
         {results && <NearestResults neighbors={results.nearestNeighbors} />}
       </div>
 
-      {/* ── Prediction results ── */}
+      {/* ── Prediction results (sub-tabs) ── */}
       <div className="results-col">
         {results && (
-          <>
-            <PredictionCard
-              prediction={results.prediction}
-              solubilityIssue={results.solubilityIssue}
+          <Tabs
+            id="results-subtabs"
+            className="results-subtabs"
+            selectedTabId={resultsTab}
+            onChange={(newTab) => setResultsTab(newTab)}
+            renderActiveTabPanelOnly
+          >
+            <Tab
+              id="prediction"
+              title="Prediction"
+              panel={
+                <PredictionCard
+                  prediction={results.prediction}
+                  solubilityIssue={results.solubilityIssue}
+                />
+              }
             />
-            {results.rxnopt.length > 0 && (
-              <OptimizationGrid predictions={results.rxnopt} />
-            )}
-            {results.architectureSwitch && (
-              <ArchitectureSwitch data={results.architectureSwitch} />
-            )}
-          </>
+            <Tab
+              id="optimization"
+              title="Condition optimization"
+              disabled={results.rxnopt.length === 0}
+              panel={<OptimizationGrid predictions={results.rxnopt} />}
+            />
+            <Tab
+              id="architecture"
+              title="Architecture switch"
+              disabled={!results.architectureSwitch}
+              panel={
+                results.architectureSwitch ? (
+                  <ArchitectureSwitch data={results.architectureSwitch} />
+                ) : undefined
+              }
+            />
+          </Tabs>
         )}
       </div>
     </div>
