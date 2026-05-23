@@ -250,8 +250,17 @@ export function NearestResults({ neighbors }: Props) {
               rows.map((n) => (
                 <tr
                   key={`${n.monomer1_smiles}|${n.monomer2_smiles}|${n.solvent_name}`}
+                  className={n.same_monomer ? 'is-same-monomer' : undefined}
                 >
                   <td>
+                    {n.same_monomer && (
+                      <span
+                        className="same-monomer-badge"
+                        title="This literature reaction uses the exact same monomer pair as your query."
+                      >
+                        same monomers
+                      </span>
+                    )}
                     <MoleculeDisplay
                       smiles={n.monomer1_smiles}
                       width={100}
