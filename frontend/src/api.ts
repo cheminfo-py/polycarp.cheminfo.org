@@ -146,6 +146,8 @@ export async function runPrediction(
     prediction,
     nearestNeighbors: preprocessed.nearest_neighbors,
     solubilityIssue,
+    lookupClass: preprocessed.lookup_class ?? null,
+    lookupClassName: preprocessed.lookup_class_name ?? null,
     rxnopt,
     architectureSwitch,
   };

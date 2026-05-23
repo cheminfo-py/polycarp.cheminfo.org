@@ -858,6 +858,54 @@ body {
   font-weight: 500;
 }
 
+/* ── Lookup / model agreement indicator ─────────────────────── */
+
+/*
+ * Surfaces whether the nearest-neighbour literature lookup agrees with the
+ * model prediction (the basis of the paper's voting model — predictions
+ * where they disagree are discarded). Calm green for agreement, amber
+ * for disagreement; hidden entirely when the lookup pool returned nothing.
+ */
+
+.lookup-agreement-row {
+  margin: 6px 0 14px;
+  font-size: 0.82rem;
+}
+
+.lookup-agree {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: #e6f4ea;
+  border: 1px solid #34a853;
+  border-radius: 4px;
+  color: #1e4620;
+  font-weight: 500;
+}
+
+.lookup-disagree {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 3px 8px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #664d03;
+  font-weight: 500;
+}
+
+.lookup-disagree-class {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
 /* ── API docs tab ──────────────────────────────────────────── */
 
 .api-docs-tab .swagger-ui .info {

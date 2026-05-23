@@ -1,4 +1,4 @@
-import type {TabId} from '@blueprintjs/core';
+import type { TabId } from '@blueprintjs/core';
 import {
   Button,
   FormGroup,
@@ -6,8 +6,7 @@ import {
   NumericInput,
   Spinner,
   Tab,
-  
-  Tabs
+  Tabs,
 } from '@blueprintjs/core';
 import { useCallback, useState } from 'react';
 
@@ -274,6 +273,8 @@ export function PredictTab() {
                 <PredictionCard
                   prediction={results.prediction}
                   solubilityIssue={results.solubilityIssue}
+                  lookupClass={results.lookupClass}
+                  lookupClassName={results.lookupClassName}
                 />
               }
             />

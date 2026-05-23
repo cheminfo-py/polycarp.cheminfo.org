@@ -1,9 +1,13 @@
-import { classColor } from '../archColors.ts';
+import { archColor, classColor } from '../archColors.ts';
 import type { PredictResponse } from '../types.ts';
 
 interface Props {
   prediction: PredictResponse;
   solubilityIssue: boolean | null;
+  /** Top-1 nearest-neighbor's predicted class (null when no neighbour was found). */
+  lookupClass: number | null;
+  /** Human-readable name of the lookup class (null when unavailable). */
+  lookupClassName: string | null;
 }
 
 /**
@@ -11,8 +15,15 @@ interface Props {
  * @param root0
  * @param root0.prediction
  * @param root0.solubilityIssue
+ * @param root0.lookupClass
+ * @param root0.lookupClassName
  */
-export function PredictionCard({ prediction, solubilityIssue }: Props) {
+export function PredictionCard({
+  prediction,
+  solubilityIssue,
+  lookupClass,
+  lookupClassName,
+}: Props) {
   const {
     predicted_class_name: predictedClassName,
     predicted_class: predictedClass,
@@ -43,6 +54,32 @@ export function PredictionCard({ prediction, solubilityIssue }: Props) {
           <span className="solubility-warning">⚠ Solubility issue</span>
         )}
       </div>
+
+      {lookupClass !== null && lookupClassName !== null && (
+        <div className="lookup-agreement-row">
+          {lookupClass === predictedClass ? (
+            <span
+              className="lookup-agree"
+              title="The nearest literature reaction agrees with the model prediction."
+            >
+              ✓ Nearest-neighbour lookup agrees
+            </span>
+          ) : (
+            <span
+              className="lookup-disagree"
+              title="The nearest literature reaction disagrees with the model prediction — the paper's voting model would discard this prediction."
+            >
+              ⚠ Lookup disagrees: nearest literature reaction is{' '}
+              <span
+                className="lookup-disagree-class"
+                style={{ background: archColor(lookupClassName) }}
+              >
+                {lookupClassName}
+              </span>
+            </span>
+          )}
+        </div>
+      )}
 
       <div className="confidence-row">
         <span className="confidence-label">Confidence:</span>
