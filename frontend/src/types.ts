@@ -22,6 +22,10 @@ export interface PreprocessResponse {
   features: Record<string, number | null>;
   nearest_neighbors: NearestNeighbor[];
   solubility_issue: boolean | null;
+  /** Top-1 nearest-neighbor's class (null when the lookup pool returned nothing). */
+  lookup_class?: number | null;
+  /** Human-readable name for `lookup_class` (resolved server-side from CLASS_LABELS). */
+  lookup_class_name?: string | null;
 }
 
 export interface PredictResponse {
@@ -100,6 +104,10 @@ export interface PredictionResults {
   prediction: PredictResponse;
   nearestNeighbors: NearestNeighbor[];
   solubilityIssue: boolean | null;
+  /** Top-1 nearest-neighbor's predicted class (null when no neighbour). */
+  lookupClass: number | null;
+  /** Human-readable name for `lookupClass`. */
+  lookupClassName: string | null;
   rxnopt: OptimizePrediction[];
   architectureSwitch: ArchitectureSwitchResponse | null;
 }

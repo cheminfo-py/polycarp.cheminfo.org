@@ -273,6 +273,8 @@ export function PredictTab() {
                 <PredictionCard
                   prediction={results.prediction}
                   solubilityIssue={results.solubilityIssue}
+                  lookupClass={results.lookupClass}
+                  lookupClassName={results.lookupClassName}
                 />
               }
             />
