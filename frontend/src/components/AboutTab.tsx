@@ -17,12 +17,12 @@ export function AboutTab() {
 
       <h2>The model</h2>
       <p>
-        A gradient-boosted classifier on{' '}
-        <strong>XTB</strong>-computed monomer descriptors plus solvent
-        log&nbsp;<em>P</em>, temperature, and an embedding of the polymerisation
-        type and method. A <strong>voting</strong> layer compares the
-        classifier&apos;s prediction against the architecture of the closest
-        same-monomer literature reaction; predictions where the two
+        A gradient-boosted classifier on <strong>XTB</strong>-computed monomer
+        descriptors plus solvent log&nbsp;<em>P</em>, temperature, and an
+        embedding of the polymerisation type and method. A{' '}
+        <strong>voting</strong> layer compares the classifier&apos;s prediction
+        against the architecture of the closest same-monomer literature
+        reaction; predictions where the two
         <em> disagree</em> are flagged on the result card (and discarded in the
         paper&apos;s coverage metric), so you know when to be cautious.
       </p>
@@ -41,8 +41,8 @@ export function AboutTab() {
 
       <h2>Architecture switch (counterfactual)</h2>
       <p>
-        For the inputs you supply, the model first predicts the architecture
-        for the <strong>exact</strong> conditions you entered — the{' '}
+        For the inputs you supply, the model first predicts the architecture for
+        the <strong>exact</strong> conditions you entered — the{' '}
         <em>baseline</em>. It then sweeps a grid of solvents (drawn from the
         chosen <em>solvent set</em>) crossed with temperatures (from the chosen{' '}
         <em>temperature range</em>) and reports the condition sets whose
@@ -131,15 +131,11 @@ export function AboutTab() {
       </p>
       <p>
         For research enquiries, reach out via{' '}
-        <a
-          href="https://lamalab.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://lamalab.org" target="_blank" rel="noopener noreferrer">
           lamalab.org
         </a>
-        . Bug reports, questions, and contributions are welcome as GitHub
-        issues on the{' '}
+        . Bug reports, questions, and contributions are welcome as GitHub issues
+        on the{' '}
         <a
           href="https://github.com/lamalab-org/copolymer-reactivity/issues"
           target="_blank"

@@ -30,9 +30,9 @@ export function UserGuideTab() {
                 prediction.
               </li>
               <li>
-                Predictions are most reliable for common vinyl monomers.
-                Unusual functional groups or ring-opening motifs may sit outside
-                the training distribution.
+                Predictions are most reliable for common vinyl monomers. Unusual
+                functional groups or ring-opening motifs may sit outside the
+                training distribution.
               </li>
             </ul>
           </div>
@@ -53,8 +53,8 @@ export function UserGuideTab() {
               <dd>
                 Draw or select the solvent molecule. The model uses the
                 solvent&apos;s log&nbsp;<em>P</em> as a feature. If the
-                monomer–solvent pair looks chemically incompatible, a
-                solubility warning is shown alongside the results.
+                monomer–solvent pair looks chemically incompatible, a solubility
+                warning is shown alongside the results.
               </dd>
               <dt>Temperature (°C)</dt>
               <dd>
@@ -70,8 +70,8 @@ export function UserGuideTab() {
               <dt>Polymerisation type</dt>
               <dd>
                 The initiation mechanism: free radical, controlled/living
-                radical (ATRP, RAFT), cationic, anionic, coordination, etc.
-                Free radical is the most data-rich category.
+                radical (ATRP, RAFT), cationic, anionic, coordination, etc. Free
+                radical is the most data-rich category.
               </dd>
               <dt>Solvent set & Temperature range</dt>
               <dd>
@@ -103,18 +103,17 @@ export function UserGuideTab() {
       <h3>Prediction card</h3>
       <p>
         The <strong>Prediction</strong> sub-tab shows the predicted architecture
-        class — <em>alternating</em>, <em>random&nbsp;to&nbsp;block&nbsp;like</em>,
-        or <em>gradient</em> — with the classifier&apos;s confidence and a full
-        probability table.
+        class — <em>alternating</em>,{' '}
+        <em>random&nbsp;to&nbsp;block&nbsp;like</em>, or <em>gradient</em> —
+        with the classifier&apos;s confidence and a full probability table.
       </p>
       <p>
-        Underneath, the <strong>lookup-agreement indicator</strong> compares
-        the model&apos;s prediction with the top-1 nearest literature reaction.
-        A calm-green <em>&ldquo;lookup agrees&rdquo;</em> pill is a strong
-        signal — the paper&apos;s voting model keeps only such predictions. An
-        amber <em>&ldquo;lookup disagrees&rdquo;</em> pill names the literature
-        class instead:
-        treat the prediction with caution and inspect the{' '}
+        Underneath, the <strong>lookup-agreement indicator</strong> compares the
+        model&apos;s prediction with the top-1 nearest literature reaction. A
+        calm-green <em>&ldquo;lookup agrees&rdquo;</em> pill is a strong signal
+        — the paper&apos;s voting model keeps only such predictions. An amber{' '}
+        <em>&ldquo;lookup disagrees&rdquo;</em> pill names the literature class
+        instead: treat the prediction with caution and inspect the{' '}
         <strong>Nearest literature</strong> sub-tab.
       </p>
       <p>
@@ -139,8 +138,8 @@ export function UserGuideTab() {
           architecture.
         </li>
         <li>
-          Compare scenarios by changing the <strong>Solvent set</strong>{' '}
-          (top-3 predicted, common, chlorinated, aromatic) or{' '}
+          Compare scenarios by changing the <strong>Solvent set</strong> (top-3
+          predicted, common, chlorinated, aromatic) or{' '}
           <strong>Temperature range</strong> in the settings bar and re-running.
         </li>
       </ul>
@@ -151,17 +150,17 @@ export function UserGuideTab() {
         architecture. The baseline is your exact inputs; counterfactuals are
         ranked by smallest change in solvent log&nbsp;<em>P</em> (then
         temperature). Each comes with a matching{' '}
-        <strong>same-monomer literature reference</strong> with a clickable
-        DOI — use it to ground a planned experiment in a published one.
+        <strong>same-monomer literature reference</strong> with a clickable DOI
+        — use it to ground a planned experiment in a published one.
       </p>
 
       <h3>Nearest literature</h3>
       <p>
         The closest experimental records in the literature database, ranked by
         fingerprint similarity of the monomer pair. Rows that use the{' '}
-        <strong>exact same monomer pair</strong> as your query are pinned to
-        the top and marked with a <em>&ldquo;same monomers&rdquo;</em> badge plus an amber
-        row tint — these are your most relevant experimental evidence.
+        <strong>exact same monomer pair</strong> as your query are pinned to the
+        top and marked with a <em>&ldquo;same monomers&rdquo;</em> badge plus an
+        amber row tint — these are your most relevant experimental evidence.
       </p>
       <p>
         Sort by Temperature, Method, Type, Architecture, or Similarity by
@@ -190,10 +189,10 @@ export function UserGuideTab() {
           properties or building a comparator series.
         </li>
         <li>
-          <strong>Reactivity ratios vs. architecture.</strong> PolyCarp
-          predicts the architecture class directly, not individual reactivity
-          ratios (r₁, r₂). The class is derived from r₁ × r₂ and r₁ / r₂, so
-          some information is deliberately abstracted.
+          <strong>Reactivity ratios vs. architecture.</strong> PolyCarp predicts
+          the architecture class directly, not individual reactivity ratios (r₁,
+          r₂). The class is derived from r₁ × r₂ and r₁ / r₂, so some
+          information is deliberately abstracted.
         </li>
         <li>
           <strong>Training distribution.</strong> The model was trained
