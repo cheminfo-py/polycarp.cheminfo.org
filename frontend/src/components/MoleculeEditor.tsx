@@ -25,11 +25,13 @@ export function MoleculeEditor({
   templates,
 }: Props) {
   const [editorKey, setEditorKey] = useState(0);
+  const [editorInitialSmiles, setEditorInitialSmiles] = useState(smiles);
   const [draftSmiles, setDraftSmiles] = useState(smiles);
   const [showEditor, setShowEditor] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
 
   const handleOpenEditor = useCallback(() => {
+    setEditorInitialSmiles(smiles);
     setDraftSmiles(smiles);
     setEditorKey((k) => k + 1);
     setShowEditor(true);
@@ -99,7 +101,7 @@ export function MoleculeEditor({
         <DialogBody style={{ padding: 0, overflow: 'hidden' }}>
           <CanvasMoleculeEditor
             key={editorKey}
-            inputValue={draftSmiles}
+            inputValue={editorInitialSmiles}
             inputFormat="smiles"
             onChange={handleEditorChange}
             width={EDITOR_W}
