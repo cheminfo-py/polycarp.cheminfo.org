@@ -2,6 +2,8 @@
 // All snake_case properties below match the Python API response shape.
 
 export interface NearestNeighbor {
+  /** 1-based rank in the API response; unique within the returned list. */
+  rank: number;
   monomer1_smiles: string;
   monomer2_smiles: string;
   solvent_name: string;

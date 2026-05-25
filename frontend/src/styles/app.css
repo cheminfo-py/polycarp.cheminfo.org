@@ -44,18 +44,14 @@ body {
 .app-wordmark {
   display: flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
   margin-right: 24px;
   flex-shrink: 0;
 }
 
-.wordmark-poly,
-.wordmark-carp {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  line-height: 1;
+.app-logo {
+  display: block;
+  height: 30px;
+  width: auto;
 }
 
 /* ── Nav ── */
@@ -68,6 +64,9 @@ body {
 }
 
 .app-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
@@ -77,6 +76,7 @@ body {
   font-size: 0.88rem;
   font-weight: 500;
   height: 100%;
+  text-decoration: none;
   transition:
     color 0.15s,
     border-color 0.15s;
@@ -101,25 +101,117 @@ body {
 
 /* ── Predict tab layout ────────────────────────────────────── */
 
+/*
+ * Stacked layout, designed to fit above the fold on a laptop:
+ *   Row 1 — a compact horizontal **settings bar** with every parameter +
+ *           the Predict button (wraps gracefully on narrow screens).
+ *   Row 2 — two columns: monomer editors on the **left** (narrow stack —
+ *           reference for what you're asking the model about) and the
+ *           **results sub-tabs** on the right (Prediction, Condition
+ *           optimization, Architecture switch, Nearest literature) —
+ *           each panel one click away, no scrolling.
+ */
 .predict-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/*
+ * Settings toolbar: two labelled parameter groups + the Predict action, all
+ * on a single non-wrapping row. Each group stacks its section label above
+ * its fields, separated from the next group by a thin vertical divider.
+ * Fields wrap *inside* a group when space is tight (so the group gets
+ * taller) but the action never wraps onto its own row — it stays anchored
+ * to the right of the bar. At very narrow widths the whole bar stacks.
+ */
+.settings-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px 24px;
+  align-items: stretch;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+}
+
+.settings-bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0; /* allow internal field-wrap rather than overflow */
+}
+
+.settings-bar-group:not(:last-of-type) {
+  padding-right: 24px;
+  border-right: 1px solid #e8ecf0;
+}
+
+.settings-bar-group h4 {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #738091;
+  white-space: nowrap;
+}
+
+.settings-bar-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: flex-end;
+}
+
+.settings-bar-group .bp5-form-group {
+  margin-bottom: 0;
+  min-width: 120px;
+  flex: 1 1 120px;
+}
+
+.settings-bar-group .bp5-form-group label.bp5-label {
+  font-size: 0.75rem;
+  margin-bottom: 3px;
+  color: #5c6570;
+}
+
+.settings-bar-action {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* On narrow viewports, allow the toolbar to stack rather than overflow. */
+@media (max-width: 800px) {
+  .settings-bar {
+    flex-wrap: wrap;
+  }
+
+  .settings-bar-group:not(:last-of-type) {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .settings-bar-action {
+    margin-left: 0;
+  }
+}
+
+.main-row {
   display: grid;
-  grid-template-columns: 300px 1fr 360px;
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 16px;
   align-items: start;
 }
 
-@media (max-width: 1100px) {
-  .predict-layout {
-    grid-template-columns: 280px 1fr;
-  }
-
-  .results-col {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 768px) {
-  .predict-layout {
+@media (max-width: 900px) {
+  .main-row {
     grid-template-columns: 1fr;
   }
 }
@@ -1247,18 +1339,60 @@ body {
   background: white;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  padding: 8px 16px 16px;
+  padding: 12px 16px 16px;
 }
 
+/*
+ * Segmented-control style: the tab list is a grey "track" containing
+ * pill-shaped tabs. The active tab is a white pill with a subtle shadow,
+ * which makes the current panel obvious at a glance; inactive tabs are
+ * muted text on transparent; disabled tabs are visibly inert.
+ */
 .results-subtabs .bp5-tab-list {
-  border-bottom: 1px solid #e8ecf0;
-  margin-bottom: 14px;
+  display: inline-flex;
   gap: 4px;
+  padding: 4px;
+  margin-bottom: 16px;
+  background: #eef2f6;
+  border-radius: 8px;
+  border-bottom: none;
 }
 
 .results-subtabs .bp5-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
   font-size: 0.85rem;
   font-weight: 600;
+  color: #5c6570;
+  background: transparent;
+  border-radius: 6px;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+}
+
+.results-subtabs .bp5-tab:hover:not([aria-disabled='true']) {
+  color: #1e3a5f;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.results-subtabs .bp5-tab[aria-selected='true'] {
+  color: #1e3a5f;
+  background: white;
+  box-shadow: 0 1px 3px rgba(15, 32, 68, 0.14);
+}
+
+.results-subtabs .bp5-tab[aria-disabled='true'] {
+  color: #b1bac4;
+  cursor: not-allowed;
+}
+
+/* Hide Blueprint's default sliding underline indicator — the pill background
+   does the work instead. */
+.results-subtabs .bp5-tab-indicator-wrapper {
+  display: none;
 }
 
 /* The panels host cards that already carry their own surface styling, so the
