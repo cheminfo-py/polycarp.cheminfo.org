@@ -129,9 +129,19 @@ export function NearestResults({ neighbors }: Props) {
     });
   }, [neighbors, archFilter, query]);
 
-  /** Filtered neighbors sorted by the active column and direction. */
+  /**
+   * Filtered neighbours sorted by the active column and direction.
+   *
+   * Same-monomer rows are pinned to the top regardless of the chosen sort —
+   * an exact-pair literature reaction is always the most relevant evidence,
+   * and we don't want a similarity-asc sort to bury it beneath dissimilar
+   * pairs that happen to share the query's solvent.
+   */
   const rows = useMemo(() => {
     const sorted = filtered.toSorted((a, b) => {
+      if (Boolean(a.same_monomer) !== Boolean(b.same_monomer)) {
+        return a.same_monomer ? -1 : 1;
+      }
       const va = sortValue(a, sort.key);
       const vb = sortValue(b, sort.key);
       let cmp = 0;
@@ -249,7 +259,7 @@ export function NearestResults({ neighbors }: Props) {
             ) : (
               rows.map((n) => (
                 <tr
-                  key={`${n.monomer1_smiles}|${n.monomer2_smiles}|${n.solvent_name}`}
+                  key={n.rank}
                   className={n.same_monomer ? 'is-same-monomer' : undefined}
                 >
                   <td>

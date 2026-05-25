@@ -1,13 +1,12 @@
 import { useState } from 'react';
 
-import { BRAND_AMBER, BRAND_NAVY } from './colors.ts';
 import { AboutTab } from './components/AboutTab.tsx';
-import { CarpIcon } from './components/Logo.tsx';
+import { ApiDocsTab } from './components/ApiDocsTab.tsx';
 import { PredictTab } from './components/PredictTab.tsx';
 import { ResultsTab } from './components/ResultsTab.tsx';
 import { UserGuideTab } from './components/UserGuideTab.tsx';
 
-type TabId = 'predict' | 'results' | 'guide' | 'about';
+type TabId = 'predict' | 'results' | 'api' | 'guide' | 'about';
 
 /** The database is browsed in the NOMAD polymerization OASIS, not in-app. */
 const NOMAD_DATA_URL =
@@ -24,6 +23,7 @@ const TABS: NavEntry[] = [
   { id: 'predict', label: 'Prediction' },
   { href: NOMAD_DATA_URL, label: 'Data' },
   { id: 'results', label: 'Results' },
+  { id: 'api', label: 'API' },
   { id: 'guide', label: 'User Guide' },
   { id: 'about', label: 'About' },
 ];
@@ -35,17 +35,9 @@ export function App() {
   return (
     <div>
       <header className="app-header">
-        {/* ── Wordmark ── */}
+        {/* ── Logo ── */}
         <div className="app-wordmark">
-          <CarpIcon size={30} variant="light" />
-          <span>
-            <span className="wordmark-poly" style={{ color: BRAND_NAVY }}>
-              Poly
-            </span>
-            <span className="wordmark-carp" style={{ color: BRAND_AMBER }}>
-              Carp
-            </span>
-          </span>
+          <img className="app-logo" src="/logo.png" alt="PolyCarp" />
         </div>
 
         {/* ── Nav ── */}
@@ -78,6 +70,7 @@ export function App() {
       <div className="app-content">
         {active === 'predict' && <PredictTab />}
         {active === 'results' && <ResultsTab />}
+        {active === 'api' && <ApiDocsTab />}
         {active === 'guide' && <UserGuideTab />}
         {active === 'about' && <AboutTab />}
       </div>
