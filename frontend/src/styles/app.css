@@ -1373,14 +1373,15 @@ body {
     box-shadow 0.15s;
 }
 
-.results-subtabs .bp5-tab:hover:not([aria-disabled='true']) {
+.results-subtabs .bp5-tab:hover:not([aria-disabled='true']):not([aria-selected='true']) {
   color: #1e3a5f;
   background: rgba(255, 255, 255, 0.55);
 }
 
 .results-subtabs .bp5-tab[aria-selected='true'] {
-  color: #1e3a5f;
-  background: white;
+  color: #0f2044;
+  background: linear-gradient(to bottom, white calc(100% - 3px), #f5a623 calc(100% - 3px));
+  font-weight: 700;
   box-shadow: 0 1px 3px rgba(15, 32, 68, 0.14);
 }
 
