@@ -1,4 +1,4 @@
-/** About page — scientific background, dataset, and citation for PolyCarp. */
+/** About page — what PolyCarp is, how it was built, and how to get in touch. */
 export function AboutTab() {
   return (
     <div className="about-content">
@@ -6,94 +6,83 @@ export function AboutTab() {
       <p>
         <strong>PolyCarp</strong> (Copolymer Architecture Reactivity Predictor)
         is a condition-aware machine-learning tool that predicts the
-        microstructure of radical copolymers. Given two monomers together with
-        reaction conditions — solvent, temperature, and polymerization mechanism
-        — it classifies the resulting copolymer as <em>random</em>,{' '}
-        <em>alternating</em>, or <em>gradient/block-like</em> and retrieves the
-        closest experimental analogues from a curated literature database.
-      </p>
-
-      <h2>Why does copolymer architecture matter?</h2>
-      <p>
-        The architecture of a statistical copolymer determines how the material
-        behaves: an alternating sequence distributes co-monomers evenly, a
-        random sequence gives statistical mixing, and a gradient or block-like
-        sequence creates domain separation. Designing a polymer for a target
-        property therefore begins with designing for a target architecture.
-      </p>
-      <p>
-        Reactivity ratios — the central quantity behind copolymer architecture —
-        have been known since Mayo and Lewis (1944) to depend on solvent,
-        temperature, and polymerization mechanism. Yet every prior predictive
-        approach, from the Q–e scheme of Alfrey and Price to recent
-        machine-learning models, takes monomer structure alone as input and
-        ignores conditions entirely. PolyCarp closes this gap by explicitly
-        incorporating reaction conditions.
-      </p>
-
-      <h2>The database</h2>
-      <p>
-        Measurements for thousands of monomer pairs exist but are scattered
-        across eight decades of heterogeneous literature, including publications
-        predating digital archiving. We developed a vision–language-model
-        pipeline that parses typeset tables and scanned figures, yielding{' '}
-        <strong>3,792 copolymerizations</strong> from{' '}
-        <strong>1,206 publications</strong>, each annotated with reactivity
-        ratios, solvent, temperature, and polymerization mechanism. This is, to
-        our knowledge, the first dataset at this scale to record reaction
-        conditions per entry.
-      </p>
-      <p>
-        The full database is openly available alongside the model and this web
-        interface. You can browse monomers and solvents in the{' '}
-        <strong>Data</strong> tab.
+        microstructure of radical copolymers. Given two monomers and reaction
+        conditions — solvent, temperature, and polymerisation mechanism — it
+        classifies the resulting copolymer as <em>alternating</em>,{' '}
+        <em>random&nbsp;to&nbsp;block&nbsp;like</em>, or <em>gradient</em>,
+        retrieves the closest experimental analogues from a curated literature
+        database, and suggests how to nudge the conditions to switch the
+        predicted architecture.
       </p>
 
       <h2>The model</h2>
       <p>
-        The predictor combines molecular descriptors computed with{' '}
-        <strong>XTB</strong> (extended tight-binding semi-empirical quantum
-        chemistry) with a gradient-boosted classifier trained on the literature
-        database. Solvent properties (log<em>P</em>), temperature, and
-        polymerization type are incorporated as additional features alongside
-        the monomer descriptors. The prediction pipeline runs four steps
-        automatically:
+        A gradient-boosted classifier on <strong>XTB</strong>-computed monomer
+        descriptors plus solvent log&nbsp;<em>P</em>, temperature, and an
+        embedding of the polymerisation type and method. A{' '}
+        <strong>voting</strong> layer compares the classifier&apos;s prediction
+        against the architecture of the closest same-monomer literature
+        reaction; predictions where the two
+        <em> disagree</em> are flagged on the result card (and discarded in the
+        paper&apos;s coverage metric), so you know when to be cautious.
       </p>
-      <ol>
-        <li>
-          <strong>Preprocessing</strong> — XTB descriptors are computed (or
-          fetched from cache) for the two monomers, and the nearest database
-          neighbours are identified via fingerprint similarity.
-        </li>
-        <li>
-          <strong>Architecture prediction</strong> — The classifier returns
-          class probabilities and a predicted architecture label.
-        </li>
-        <li>
-          <strong>Condition optimisation</strong> — A systematic sweep over
-          solvents and temperatures shows how the predicted architecture changes
-          across the condition space.
-        </li>
-        <li>
-          <strong>Architecture-switch search</strong> — Counterfactual analysis
-          identifies the minimal change in conditions that would flip the
-          predicted architecture, highlighting which conditions are decisive.
-        </li>
-      </ol>
 
-      <h2>Validation</h2>
+      <h2>The data</h2>
       <p>
-        The tool was validated against a literature case study in which it
-        correctly captures solvent-driven architectural transitions, and against
-        three prospective laboratory copolymerizations carried out specifically
-        to test the model&apos;s predictions.
+        A vision–language-model pipeline parses typeset tables and scanned
+        figures from polymer-chemistry literature, yielding{' '}
+        <strong>~3,800 copolymerisations</strong> from{' '}
+        <strong>~1,200 publications</strong>, each annotated with reactivity
+        ratios, solvent, temperature, and polymerisation mechanism — the first
+        dataset at this scale to record reaction conditions per entry. The full
+        dataset is openly available; the <strong>Data</strong> tab links to the
+        NOMAD entry for interactive search.
       </p>
+
+      <h2>Architecture switch (counterfactual)</h2>
+      <p>
+        For the inputs you supply, the model first predicts the architecture for
+        the <strong>exact</strong> conditions you entered — the{' '}
+        <em>baseline</em>. It then sweeps a grid of solvents (drawn from the
+        chosen <em>solvent set</em>) crossed with temperatures (from the chosen{' '}
+        <em>temperature range</em>) and reports the condition sets whose
+        predicted architecture <strong>differs</strong> from the baseline,
+        ranked by the smallest change in solvent log&nbsp;<em>P</em> (then
+        temperature). Each counterfactual is paired with the closest{' '}
+        <em>same-monomer</em> literature reaction so the experimental analogue
+        is one click away.
+      </p>
+
+      <h2>How the app was built</h2>
+      <ul className="about-pipeline">
+        <li>
+          <strong>Data extraction</strong> — a multi-modal VLM pipeline (built
+          on the lab&apos;s open-source <code>copolextractor</code>) ingests
+          PDFs and tabulates reactivity ratios with conditions.
+        </li>
+        <li>
+          <strong>Curation</strong> — duplicates and inconsistent entries are
+          flagged and reconciled; SMILES are canonicalised with RDKit.
+        </li>
+        <li>
+          <strong>Descriptors</strong> — XTB semi-empirical quantum chemistry
+          computes per-monomer electronic descriptors (Fukui indices, HOMO/LUMO,
+          dipole, etc.); solvent properties come from RDKit.
+        </li>
+        <li>
+          <strong>Model</strong> — an XGBoost multi-class classifier with
+          hyper-parameter tuning on the curated splits; a nearest-neighbour
+          lookup module computes the voting layer.
+        </li>
+        <li>
+          <strong>Deployment</strong> — the model and dataset ship together
+          inside a FastAPI service (this web app is its frontend). Both
+          codebases are public; see the <strong>API</strong> tab for the live
+          OpenAPI documentation.
+        </li>
+      </ul>
 
       <h2>Citation</h2>
-      <p>
-        If you use PolyCarp or the underlying database in your research, please
-        cite the corresponding publication:
-      </p>
       <blockquote className="about-citation">
         Predicting copolymer architecture from literature-extracted data.{' '}
         <em>Manuscript in preparation.</em> See the{' '}
@@ -104,41 +93,65 @@ export function AboutTab() {
         >
           GitHub repository
         </a>{' '}
-        for the latest preprint and dataset.
+        for the latest preprint and the dataset.
       </blockquote>
 
-      <h2>Open availability</h2>
+      <h2>Credits & contact</h2>
       <p>
-        The database, trained model, and this web interface are all openly
-        available under permissive licences. Programmatic access is provided via
-        a REST API — see the <strong>API</strong> tab for interactive
-        documentation.
-      </p>
-
-      <h2>Technical stack</h2>
-      <p>
-        Frontend built with{' '}
-        <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-          React
-        </a>
-        ,{' '}
+        Built by <strong>Mara Schilling-Wilhelmi</strong>,{' '}
+        <strong>
+          <a
+            href="https://zakodium.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Luc Patiny
+          </a>
+        </strong>{' '}
+        (Zakodium SA), and{' '}
+        <strong>
+          <a
+            href="https://kjablonka.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Kevin Jablonka
+          </a>
+        </strong>
+        , with{' '}
         <a
-          href="https://blueprintjs.com"
+          href="https://nomad-lab.eu/nomad-lab/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Blueprint
-        </a>
-        , and{' '}
-        <a
-          href="https://github.com/cheminfo/react-ocl"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          react-ocl
+          NOMAD
         </a>{' '}
-        (OpenChemLib). Backend powered by a Python/FastAPI service running XTB
-        calculations and serving the curated database.
+        support from <strong>Sarthak Kapoor</strong> and experimental support
+        from <strong>Boris Bulgakov</strong>.
+      </p>
+      <p>
+        For research enquiries, reach out via{' '}
+        <a href="https://lamalab.org" target="_blank" rel="noopener noreferrer">
+          lamalab.org
+        </a>
+        . Bug reports, questions, and contributions are welcome as GitHub issues
+        on the{' '}
+        <a
+          href="https://github.com/lamalab-org/copolymer-reactivity/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          copolymer-reactivity
+        </a>{' '}
+        (model + API) and{' '}
+        <a
+          href="https://github.com/cheminfo-py/polycarp.cheminfo.org/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          polycarp.cheminfo.org
+        </a>{' '}
+        (this web app) repositories.
       </p>
     </div>
   );
